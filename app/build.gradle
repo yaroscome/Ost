@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            jniDebuggable true
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        dev {
+            applicationId "com.yrs.ost_dev"
+
+            buildConfigField "String", "SKYLARK_BASE_URL", '"http://feature-code-test.skylark-cms.qa.aws.ostmodern.co.uk:8000/"'
+
+            buildConfigField "String", "DEV_TAG", '"Y_"'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.android.support:appcompat-v7:23.1.1'
+
+
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-all:1.10.19"
+}
