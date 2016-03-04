@@ -34,9 +34,6 @@ public class RootSetPresenter implements RootSetContract.ActionListener {
 
 
     @NonNull
-    private List<Image> inMemoryImages;
-
-    @NonNull
     private SkylarkConnector skylark;
 
     Context context;
@@ -44,10 +41,8 @@ public class RootSetPresenter implements RootSetContract.ActionListener {
 
     public RootSetPresenter(
             @NonNull RootSetContract.View view,
-            @NonNull List<Image> inMemoryImages,
             @NonNull SkylarkConnector skylark) {
         this.view = view;
-        this.inMemoryImages = inMemoryImages;
         this.skylark = skylark;
         context = (Context) view;
     }

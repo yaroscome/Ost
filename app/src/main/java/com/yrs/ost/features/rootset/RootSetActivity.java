@@ -53,7 +53,6 @@ public class RootSetActivity extends Activity
 
         actionListener = new RootSetPresenter(
                 this,
-                inMemoryImages,
                 skylark
             );
 
