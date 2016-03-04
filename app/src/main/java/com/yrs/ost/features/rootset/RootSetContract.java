@@ -1,16 +1,24 @@
 package com.yrs.ost.features.rootset;
 
+import com.yrs.ost.models.Set;
+
+import java.util.List;
+
 /**
  * Created by yaros on 03/03/16.
  */
 public interface RootSetContract {
-    public interface View {
+    interface View {
 
+        void showErrorDialog(String errorMessage);
+        void showEpisodeDetails(String episodePath);
+        void populateList(List<Set> rootSetList);
     }
 
-    public interface ActionListener {
+    interface ActionListener {
 
-        public void onItemClick(View view);
+        void getEpisodeDetails(int position);
+        void startSetDownloading();
 
     }
 

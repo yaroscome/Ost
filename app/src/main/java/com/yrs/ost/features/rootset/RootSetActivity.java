@@ -29,14 +29,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RootSetActivity extends Activity implements AdapterView.OnItemClickListener {
+public class RootSetActivity extends Activity
+        implements AdapterView.OnItemClickListener, RootSetContract.View{
     AppEnvironment appEnvironment;
     ListView rootSetListView;
     RootSetAdapter rootSetAdapter;
-    List<Set> rootSetList;
-    List<Image> inMemoryImages;
     SkylarkConnector skylark;
+    List<Image> inMemoryImages;
 
+
+    private RootSetContract.ActionListener actionListener;
 
 
     @Override
@@ -49,81 +51,13 @@ public class RootSetActivity extends Activity implements AdapterView.OnItemClick
         skylark = appEnvironment.getSimpleInjection().getSkylarkConnector();
         inMemoryImages = appEnvironment.getInMemoryImages();
 
-        Call<SkylarkGetRootSetResponse> calRootSet = skylark.getRootSet();
+        actionListener = new RootSetPresenter(
+                this,
+                inMemoryImages,
+                skylark
+            );
 
-        calRootSet.enqueue(new Callback<SkylarkGetRootSetResponse>() {
-            @Override
-            public void onResponse(Call<SkylarkGetRootSetResponse> call, Response<SkylarkGetRootSetResponse> response) {
-
-                if(response.isSuccess()) {
-                    rootSetList = response.body().getRootSetList();
-                    Log.d(BuildConfig.DEV_TAG, rootSetList.get(0) + " ");
-                    rootSetAdapter = new RootSetAdapter(
-                            RootSetActivity.this,
-                            R.layout.root_set_list_item_layout,
-                            rootSetList,
-                            skylark,
-                            inMemoryImages
-                        );
-                    rootSetListView.setAdapter(rootSetAdapter);
-                    rootSetListView.setOnItemClickListener(RootSetActivity.this);
-
-
-
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RootSetActivity.this);
-                    switch (response.code()) {
-
-                        case 404:
-                            builder.setMessage(getResources().getString(R.string.ERROR_404))
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                        }
-                                    });
-                            break;
-                        case 500:
-                            builder.setMessage(getResources().getString(R.string.ERROR_500))
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                        }
-                                    });
-                            break;
-                        default:
-                            builder.setMessage(getResources().getString(R.string.ERROR_UNKNOWN))
-                                    .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                        }
-                                    });
-
-                    }
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SkylarkGetRootSetResponse> call, Throwable t) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RootSetActivity.this);
-                builder.setMessage(getResources().getString(R.string.ERROR_UNKNOWN))
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-            }
-        });
-
-
+        actionListener.startSetDownloading();
 
     }
 
@@ -134,21 +68,39 @@ public class RootSetActivity extends Activity implements AdapterView.OnItemClick
     }
 
 
+    public void showErrorDialog(String errorMessage){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(errorMessage)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+            });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void populateList(List<Set> rootSetList){
+        rootSetAdapter = new RootSetAdapter(
+                RootSetActivity.this,
+                R.layout.root_set_list_item_layout,
+                rootSetList,
+                skylark,
+                inMemoryImages
+        );
+        rootSetListView.setAdapter(rootSetAdapter);
+        rootSetListView.setOnItemClickListener(RootSetActivity.this);
+    }
+
+    public void showEpisodeDetails(String episodePath){
+        Intent intent = new Intent(this, EpisodeActivity.class);
+        intent.putExtra(AppEnvironment.EPISODE_PATH, episodePath);
+        startActivity(intent);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Set singleSet = rootSetList.get(position);
-        List<Item> itemList = singleSet.getItemList();
-        if(itemList != null && !itemList.isEmpty()){
-            for(Item item: singleSet.getItemList()) {
-                if(item.getContentType().equals(AppEnvironment.EPISODE_STRING)){
-                    Intent intent = new Intent(this, EpisodeActivity.class);
-                    intent.putExtra(AppEnvironment.EPISODE_PATH, item.getContentUrl());
-                    startActivity(intent);
-                    break;
-                }
-            }
-        } else {
-            
-        }
+        actionListener.getEpisodeDetails(position);
     }
 }
