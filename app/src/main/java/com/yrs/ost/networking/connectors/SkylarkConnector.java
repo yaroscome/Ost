@@ -1,5 +1,6 @@
 package com.yrs.ost.networking.connectors;
 
+import com.yrs.ost.networking.responses.SkylarkGetImagesResponse;
 import com.yrs.ost.networking.responses.SkylarkGetRootSetResponse;
 
 import retrofit2.Call;
@@ -15,5 +16,8 @@ public interface SkylarkConnector {
 
     @GET("")
     void getEpisodeDetails();
+
+    @GET("api/images/")
+    Call<SkylarkGetImagesResponse> getImages();
 
 }

@@ -4,19 +4,24 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+
+    <ImageView
+        android:id="@+id/visual_imageView"
+        android:src="@drawable/promo217595590"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"/>
     <TextView
         android:id="@+id/title_textView"
         android:gravity="right"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/black"
         android:textSize="30sp"
         android:padding="10dp"
         android:text="Title"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
 
 

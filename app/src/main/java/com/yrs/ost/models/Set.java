@@ -1,5 +1,10 @@
 package com.yrs.ost.models;
 
+import android.support.annotation.Nullable;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
  * Created by yaros on 03/03/16.
  */
@@ -7,7 +12,17 @@ public class Set {
 
     private String uid;
     private String title;
-    private String tempImage;
+
+    private String self;
+
+    @Nullable
+    @SerializedName("image_urls")
+    private List<String> imageUrls;
+
+
+    @Nullable
+    @SerializedName("items")
+    private List<Item> itemList;
 
     public String getUid() {
         return uid;
@@ -25,12 +40,32 @@ public class Set {
         this.title = title;
     }
 
-    public String getTempImage() {
-        return tempImage;
+
+    @Nullable
+    public List<Item> getItemList() {
+        return itemList;
     }
 
-    public void setTempImage(String tempImage) {
-        this.tempImage = tempImage;
+    @Nullable
+    public void setItemList(List<Item> itemList) {
+        this.itemList = itemList;
+    }
+
+    public String getSelf() {
+        return self;
+    }
+
+    public void setSelf(String self) {
+        this.self = self;
+    }
+
+    @Nullable
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(@Nullable List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     @Override
@@ -38,7 +73,9 @@ public class Set {
         return "Set{" +
                 "uid='" + uid + '\'' +
                 ", title='" + title + '\'' +
-                ", tempImage='" + tempImage + '\'' +
+                ", self='" + self + '\'' +
+                ", imageUrls=" + imageUrls +
+                ", itemList=" + itemList +
                 '}';
     }
 }
