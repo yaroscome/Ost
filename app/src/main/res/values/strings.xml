@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Ost</string>
+
+    <string name="ERROR_404">Error 404, please retry later</string>
+    <string name="ERROR_500">Error 500, please retry later</string>
+    <string name="ERROR_UNKNOWN">Error Unknown, please retry later</string>
+
 </resources>

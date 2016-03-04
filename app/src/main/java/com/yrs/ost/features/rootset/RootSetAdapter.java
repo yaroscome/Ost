@@ -76,22 +76,26 @@ public class RootSetAdapter extends ArrayAdapter<Set> {
 
         viewHolder.titleTextView.setText(singleSet.getTitle());
 
+
         if(singleSet.getImageUrls() != null && !singleSet.getImageUrls().isEmpty()) {
             for(Image image: inMemoryImages) {
                 String self = singleSet.getSelf();
                 String contentUrl = image.getContentUrl();
                 if(self.equals(contentUrl)) {
-//                if(singleSet.getSelf().equals(image.getContentUrl())) {
                     StringTokenizer tokenizer = new StringTokenizer(image.getUrl(), "?");
                     String imageUrl = tokenizer.nextToken();
                     Picasso.with(context)
                             .load(imageUrl)
+                            .placeholder(R.drawable.placeholder)
                             .fit()
                             .into(viewHolder.visualImageView);
+
                     break;
                 }
             }
         }
+
+
 
 
 

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/visual_imageView"
-        android:src="@drawable/promo217595590"
         android:layout_width="match_parent"
+        android:src="@drawable/placeholder"
         android:layout_height="250dp"/>
     <TextView
         android:id="@+id/title_textView"

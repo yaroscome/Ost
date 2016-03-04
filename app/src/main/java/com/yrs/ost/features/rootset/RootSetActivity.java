@@ -1,5 +1,8 @@
 package com.yrs.ost.features.rootset;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RootSetActivity extends AppCompatActivity {
+public class RootSetActivity extends Activity {
     AppEnvironment appEnvironment;
     ListView rootSetListView;
     RootSetAdapter rootSetAdapter;
@@ -61,20 +64,54 @@ public class RootSetActivity extends AppCompatActivity {
 
 
                 } else {
-
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RootSetActivity.this);
                     switch (response.code()) {
+
                         case 404:
+                            builder.setMessage(getResources().getString(R.string.ERROR_404))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    });
                             break;
                         case 500:
+                            builder.setMessage(getResources().getString(R.string.ERROR_500))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    });
                             break;
                         default:
+                            builder.setMessage(getResources().getString(R.string.ERROR_UNKNOWN))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    });
 
                     }
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }
 
             @Override
             public void onFailure(Call<SkylarkGetRootSetResponse> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RootSetActivity.this);
+                builder.setMessage(getResources().getString(R.string.ERROR_UNKNOWN))
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
 
             }
         });
@@ -87,8 +124,6 @@ public class RootSetActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
-//        rootSetListView.setAdapter(rootSetAdapter);
     }
 
 
