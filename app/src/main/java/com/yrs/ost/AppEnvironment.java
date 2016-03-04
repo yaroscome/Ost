@@ -12,6 +12,11 @@ import java.util.List;
  * Created by yaros on 03/03/16.
  */
 public class AppEnvironment extends Application {
+
+    public final static String EPISODE_STRING = "episode";
+    public final static String EPISODE_PATH = "episode_path";
+
+
     private SimpleInjection simpleInjection;
     public SimpleInjection getSimpleInjection() {
         if(simpleInjection == null) {

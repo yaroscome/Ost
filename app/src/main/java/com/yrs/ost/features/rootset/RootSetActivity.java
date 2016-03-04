@@ -3,16 +3,21 @@ package com.yrs.ost.features.rootset;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.yrs.ost.AppEnvironment;
 import com.yrs.ost.BuildConfig;
 import com.yrs.ost.R;
+import com.yrs.ost.features.episodes.EpisodeActivity;
 import com.yrs.ost.models.Image;
+import com.yrs.ost.models.Item;
 import com.yrs.ost.models.Set;
 import com.yrs.ost.networking.connectors.SkylarkConnector;
 import com.yrs.ost.networking.responses.SkylarkGetRootSetResponse;
@@ -24,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RootSetActivity extends Activity {
+public class RootSetActivity extends Activity implements AdapterView.OnItemClickListener {
     AppEnvironment appEnvironment;
     ListView rootSetListView;
     RootSetAdapter rootSetAdapter;
@@ -61,6 +66,8 @@ public class RootSetActivity extends Activity {
                             inMemoryImages
                         );
                     rootSetListView.setAdapter(rootSetAdapter);
+                    rootSetListView.setOnItemClickListener(RootSetActivity.this);
+
 
 
                 } else {
@@ -127,4 +134,21 @@ public class RootSetActivity extends Activity {
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Set singleSet = rootSetList.get(position);
+        List<Item> itemList = singleSet.getItemList();
+        if(itemList != null && !itemList.isEmpty()){
+            for(Item item: singleSet.getItemList()) {
+                if(item.getContentType().equals(AppEnvironment.EPISODE_STRING)){
+                    Intent intent = new Intent(this, EpisodeActivity.class);
+                    intent.putExtra(AppEnvironment.EPISODE_PATH, item.getContentUrl());
+                    startActivity(intent);
+                    break;
+                }
+            }
+        } else {
+            
+        }
+    }
 }
